@@ -35,4 +35,5 @@ repositories {
 
 dependencies {
     implementation "com.facebook.react:react-native:${safeExtGet("reactNative", "+")}" // from node_modules
+    implementation files('libs/xhssharesdk_release_v1.1.4.aar')
 }
