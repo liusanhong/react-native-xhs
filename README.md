@@ -2,7 +2,7 @@
 
 ## Getting started
 
-`$ npm install react-native-xhs --save`
+`$ yarn add react-native-xhs`
 
 ### Mostly automatic installation
 

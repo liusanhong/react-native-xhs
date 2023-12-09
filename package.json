@@ -1,13 +1,13 @@
 {
   "name": "react-native-xhs",
   "title": "React Native Xhs",
-  "version": "1.0.0",
-  "description": "TODO",
-  "main": "index.js",
+  "version": "0.0.1",
+  "description": "小红书ReactNative组件",
+  "main": "index.ts",
   "files": [
     "README.md",
     "android",
-    "index.js",
+    "index.ts",
     "ios",
     "react-native-xhs.podspec"
   ],
