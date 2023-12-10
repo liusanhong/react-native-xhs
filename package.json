@@ -1,7 +1,7 @@
 {
   "name": "react-native-xhs",
   "title": "React Native Xhs",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "小红书ReactNative组件",
   "main": "index.ts",
   "files": [
