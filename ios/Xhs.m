@@ -9,9 +9,9 @@ RCT_EXPORT_MODULE()
 
 
 
-RCT_EXPORT_METHOD(register:(NSString *)key :(RCTResponseSenderBlock)onSuccess) {
+RCT_EXPORT_METHOD(register:(NSString *)key :(NSString *)universalLink :(RCTResponseSenderBlock)onSuccess) {
     dispatch_async(dispatch_get_main_queue(), ^{
-        [XHSApi registerApp:key universalLink:@"" delegate:self];
+        [XHSApi registerApp:key universalLink:universalLink delegate:self];
     });
 
 }
@@ -63,7 +63,7 @@ RCT_EXPORT_METHOD(shareVideo:(NSString *)title :(NSString *)content :(NSString *
         messageObject.content = content;
 
         [videoResources addObject:videoObject];
-        shareRequest.videoInofoItems = videoResources;
+            shareRequest.videoInofoItems = videoResources;
         [XHSApi sendRequest:shareRequest completion:^(BOOL success) {
 
         }];
