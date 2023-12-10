@@ -63,7 +63,8 @@ RCT_EXPORT_METHOD(shareVideo:(NSString *)title :(NSString *)content :(NSString *
         messageObject.content = content;
 
         [videoResources addObject:videoObject];
-            shareRequest.videoInofoItems = videoResources;
+        shareRequest.videoInofoItems = videoResources;
+        shareRequest.textContentItem = messageObject;
         [XHSApi sendRequest:shareRequest completion:^(BOOL success) {
 
         }];

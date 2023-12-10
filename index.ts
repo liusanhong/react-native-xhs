@@ -6,7 +6,7 @@ const {Xhs} = NativeModules;
 
 export default Xhs;
 
-export function initAMapSearch(key: string, universalLink?: srting) {
+export function initAMapSearch(key: string, universalLink?: string) {
     if (Platform.OS === "android") {
         Xhs.register(key, (res: any) => {
             console.log('initAMapSearch result:', res)
