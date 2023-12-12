@@ -1,6 +1,7 @@
 // main index.js
 
 import {NativeModules, Platform} from 'react-native';
+import * as Constants from "constants";
 
 const {Xhs} = NativeModules;
 
@@ -19,10 +20,28 @@ export function initAMapSearch(key: string, universalLink?: string) {
 
 }
 
-export function shareImage(title: string, content: string, imageUrl: string) {
-    Xhs.shareImage(title, content, imageUrl);
+export function shareImage(title: string, content: string, imageUrl: string,callback:Function) {
+    if(Platform.OS === 'ios'){
+        Xhs.shareImage(title, content, imageUrl);
+    }else {
+        Xhs.shareImage(title, content, imageUrl,callback);
+    }
+
 }
 
-export function shareVideo(title: string, content: string, imageUrl: string, videoUrl: string) {
-    Xhs.shareVideo(title, content, imageUrl, videoUrl);
+export function shareVideo(title: string, content: string, imageUrl: string, videoUrl: string,callback:Function) {
+    if(Platform.OS === 'ios') {
+        Xhs.shareVideo(title, content, imageUrl, videoUrl);
+    }else {
+        Xhs.shareVideo(title, content, imageUrl, videoUrl,callback);
+    }
+}
+
+
+export function isXhsInstalled(callback:Function) {
+    if(Platform.OS === 'ios') {
+        // Xhs.shareVideo(callback);
+    }else {
+        Xhs.shareVideo(callback);
+    }
 }

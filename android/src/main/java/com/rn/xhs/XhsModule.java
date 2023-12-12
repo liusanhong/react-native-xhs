@@ -13,6 +13,7 @@ import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.Callback;
+import com.xingin.xhssharesdk.XhsShareSdkTools;
 import com.xingin.xhssharesdk.callback.XhsShareCallback;
 import com.xingin.xhssharesdk.callback.XhsShareRegisterCallback;
 import com.xingin.xhssharesdk.core.XhsShareSdk;
@@ -72,7 +73,7 @@ public class XhsModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void shareImage(String title, String content, String imageUrl) {
+    public void shareImage(String title, String content, String imageUrl, Callback callback) {
         XhsNote xhsNote = new XhsNote();
         xhsNote.setTitle(title);
         xhsNote.setContent(content);
@@ -87,11 +88,13 @@ public class XhsModule extends ReactContextBaseJavaModule {
         XhsShareSdk.setShareCallback(new XhsShareCallback() {
             @Override
             public void onSuccess(String s) {
+                callback.invoke("success");
                 Log.e(TAG,"setShareCallback onSuccess: "+s);
             }
 
             @Override
             public void onError(@NonNull String s, int i, @NonNull String s1, @Nullable Throwable throwable) {
+                callback.invoke("error");
                 Log.e(TAG,"setShareCallback onError: "+s);
                 Log.e(TAG,"setShareCallback onError: "+s1);
                 Log.e(TAG,"setShareCallback onError: "+throwable.getMessage());
@@ -100,7 +103,7 @@ public class XhsModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void shareVideo(String title, String content,String imageUrl, String videoUrl) {
+    public void shareVideo(String title, String content,String imageUrl, String videoUrl,Callback callback) {
         XhsNote xhsNote = new XhsNote();
         xhsNote.setTitle(title);
         xhsNote.setContent(content);
@@ -116,15 +119,25 @@ public class XhsModule extends ReactContextBaseJavaModule {
         XhsShareSdk.setShareCallback(new XhsShareCallback() {
             @Override
             public void onSuccess(String s) {
+                callback.invoke("success");
                 Log.e(TAG,"setShareCallback onSuccess: "+s);
             }
 
             @Override
             public void onError(@NonNull String s, int i, @NonNull String s1, @Nullable Throwable throwable) {
+                callback.invoke("error");
                 Log.e(TAG,"setShareCallback onError: "+s);
                 Log.e(TAG,"setShareCallback onError: "+s1);
                 Log.e(TAG,"setShareCallback onError: "+throwable.getMessage());
             }
         });
     }
+
+
+    @ReactMethod
+    public void isXhsInstalled(Callback callback){
+        boolean isInstall = XhsShareSdkTools.isXhsInstalled(reactContext);
+        callback.invoke(isInstall);
+    }
+
 }
