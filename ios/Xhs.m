@@ -9,15 +9,20 @@ RCT_EXPORT_MODULE()
 
 
 
-RCT_EXPORT_METHOD(register:(NSString *)key :(NSString *)universalLink :(RCTResponseSenderBlock)onSuccess) {
+RCT_EXPORT_METHOD(register:(NSString *)key :(NSString *)universalLink :(RCTResponseSenderBlock)callback) {
     dispatch_async(dispatch_get_main_queue(), ^{
-        [XHSApi registerApp:key universalLink:universalLink delegate:self];
+        BOOL init =[XHSApi registerApp:key universalLink:universalLink delegate:self];
+        if (init) {
+            callback(@[@"success"]);
+        }else{
+            callback(@[@"error"]);
+        }
     });
 
 }
 
 
-RCT_EXPORT_METHOD(shareImage:(NSString *)title :(NSString *)content :(NSString *)imageUrl) {
+RCT_EXPORT_METHOD(shareImage:(NSString *)title :(NSString *)content :(NSString *)imageUrl :(RCTResponseSenderBlock)callback) {
 
     dispatch_async(dispatch_get_main_queue(), ^{
 
@@ -35,6 +40,11 @@ RCT_EXPORT_METHOD(shareImage:(NSString *)title :(NSString *)content :(NSString *
         shareRequest.textContentItem = textItem;
         shareRequest.imageInfoItems = imageResources;
         [XHSApi sendRequest:shareRequest completion:^(BOOL success) {
+            if (success) {
+                callback(@[@"success"]);
+            }else{
+                callback(@[@"error"]);
+            }
 
         }];
 
@@ -43,7 +53,7 @@ RCT_EXPORT_METHOD(shareImage:(NSString *)title :(NSString *)content :(NSString *
 }
 
 
-RCT_EXPORT_METHOD(shareVideo:(NSString *)title :(NSString *)content :(NSString *)imageUrl :(NSString *)videoUrl) {
+RCT_EXPORT_METHOD(shareVideo:(NSString *)title :(NSString *)content :(NSString *)imageUrl :(NSString *)videoUrl :(RCTResponseSenderBlock)callback) {
 
     dispatch_async(dispatch_get_main_queue(), ^{
 
@@ -66,11 +76,23 @@ RCT_EXPORT_METHOD(shareVideo:(NSString *)title :(NSString *)content :(NSString *
         shareRequest.videoInofoItems = videoResources;
         shareRequest.textContentItem = messageObject;
         [XHSApi sendRequest:shareRequest completion:^(BOOL success) {
-
+            if (success) {
+                callback(@[@"success"]);
+            }else{
+                callback(@[@"error"]);
+            }
         }];
 
     });
 
 }
+
+RCT_EXPORT_METHOD(isXhsInstalled:(RCTResponseSenderBlock)callback) {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        BOOL installed = [XHSApi isXHSAppInstalled];
+        callback(@[@(installed)]);
+    });
+}
+
 
 @end
