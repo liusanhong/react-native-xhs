@@ -128,7 +128,7 @@ public class XhsModule extends ReactContextBaseJavaModule {
                 callback.invoke("error");
                 Log.e(TAG,"setShareCallback onError: "+s);
                 Log.e(TAG,"setShareCallback onError: "+s1);
-                Log.e(TAG,"setShareCallback onError: "+throwable.getMessage());
+                Log.e(TAG,"setShareCallback onError: ");
             }
         });
     }
