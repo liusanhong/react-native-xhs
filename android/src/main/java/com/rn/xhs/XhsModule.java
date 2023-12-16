@@ -65,8 +65,8 @@ public class XhsModule extends ReactContextBaseJavaModule {
 
             @Override
             public void onError(int i, String s, @Nullable Exception e) {
-                Log.e(TAG,"register: onError"+s+e.getMessage());
-                callback.invoke("error:" + e.getMessage());
+                Log.e(TAG,"register: onError"+s);
+                callback.invoke("error:");
 
             }
         });
@@ -97,7 +97,7 @@ public class XhsModule extends ReactContextBaseJavaModule {
                 callback.invoke("error");
                 Log.e(TAG,"setShareCallback onError: "+s);
                 Log.e(TAG,"setShareCallback onError: "+s1);
-                Log.e(TAG,"setShareCallback onError: "+throwable.getMessage());
+                Log.e(TAG,"setShareCallback onError: ");
             }
         });
     }
