@@ -2,17 +2,18 @@
 
 package com.rn.xhs;
 
-import android.net.Uri;
+import android.os.Build;
 import android.util.Log;
-import android.webkit.URLUtil;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 
+import com.facebook.react.bridge.Callback;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
-import com.facebook.react.bridge.Callback;
+import com.facebook.react.bridge.ReadableArray;
 import com.xingin.xhssharesdk.XhsShareSdkTools;
 import com.xingin.xhssharesdk.callback.XhsShareCallback;
 import com.xingin.xhssharesdk.callback.XhsShareRegisterCallback;
@@ -24,15 +25,14 @@ import com.xingin.xhssharesdk.model.sharedata.XhsNote;
 import com.xingin.xhssharesdk.model.sharedata.XhsVideoInfo;
 import com.xingin.xhssharesdk.model.sharedata.XhsVideoResourceBean;
 
-import java.io.File;
-import java.lang.reflect.Array;
-import java.net.URI;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class XhsModule extends ReactContextBaseJavaModule {
 
     private final ReactApplicationContext reactContext;
-    private String TAG ="XhsModule";
+    private String TAG = "XhsModule";
 
     public XhsModule(ReactApplicationContext reactContext) {
         super(reactContext);
@@ -58,16 +58,51 @@ public class XhsModule extends ReactContextBaseJavaModule {
         XhsShareSdk.registerApp(reactContext, appkey, config, new XhsShareRegisterCallback() {
             @Override
             public void onSuccess() {
-                Log.e(TAG,"register: onSuccess");
+                Log.e(TAG, "register: onSuccess");
 
                 callback.invoke("success");
             }
 
             @Override
             public void onError(int i, String s, @Nullable Exception e) {
-                Log.e(TAG,"register: onError"+s);
+                Log.e(TAG, "register: onError" + s);
                 callback.invoke("error:");
 
+            }
+        });
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    @ReactMethod
+    public void shareImages(String title, String content, ReadableArray imageUrls, Callback callback) {
+        XhsNote xhsNote = new XhsNote();
+        xhsNote.setTitle(title);
+        xhsNote.setContent(content);
+//        Log.e(TAG, imageUrls.toString());
+
+        List<XhsImageResourceBean> imageList = new ArrayList<>();
+        for (int i = 0; i < imageUrls.size(); i++) {
+            imageList.add(XhsImageResourceBean.fromUrl(imageUrls.getString(i)));
+        }
+
+        xhsNote.setImageInfo(new XhsImageInfo(imageList));
+
+        String sessionId = XhsShareSdk.shareNote(reactContext.getCurrentActivity(), xhsNote);
+        Log.e(TAG, "sessionId:" + sessionId);
+
+        XhsShareSdk.setShareCallback(new XhsShareCallback() {
+            @Override
+            public void onSuccess(String s) {
+                callback.invoke("success");
+                Log.e(TAG, "setShareCallback onSuccess: " + s);
+            }
+
+            @Override
+            public void onError(@NonNull String s, int i, @NonNull String s1, @Nullable Throwable throwable) {
+                callback.invoke("error");
+                Log.e(TAG, "setShareCallback onError: " + s);
+                Log.e(TAG, "setShareCallback onError: " + s1);
+                Log.e(TAG, "setShareCallback onError: ");
             }
         });
     }
@@ -78,64 +113,64 @@ public class XhsModule extends ReactContextBaseJavaModule {
         xhsNote.setTitle(title);
         xhsNote.setContent(content);
         xhsNote.setImageInfo(new XhsImageInfo(Arrays.asList(
-                XhsImageResourceBean.fromUrl(imageUrl)
+                        XhsImageResourceBean.fromUrl(imageUrl)
                 ))
         );
 
         String sessionId = XhsShareSdk.shareNote(reactContext.getCurrentActivity(), xhsNote);
-        Log.e(TAG,"sessionId:"+sessionId);
+        Log.e(TAG, "sessionId:" + sessionId);
 
         XhsShareSdk.setShareCallback(new XhsShareCallback() {
             @Override
             public void onSuccess(String s) {
                 callback.invoke("success");
-                Log.e(TAG,"setShareCallback onSuccess: "+s);
+                Log.e(TAG, "setShareCallback onSuccess: " + s);
             }
 
             @Override
             public void onError(@NonNull String s, int i, @NonNull String s1, @Nullable Throwable throwable) {
                 callback.invoke("error");
-                Log.e(TAG,"setShareCallback onError: "+s);
-                Log.e(TAG,"setShareCallback onError: "+s1);
-                Log.e(TAG,"setShareCallback onError: ");
+                Log.e(TAG, "setShareCallback onError: " + s);
+                Log.e(TAG, "setShareCallback onError: " + s1);
+                Log.e(TAG, "setShareCallback onError: ");
             }
         });
     }
 
     @ReactMethod
-    public void shareVideo(String title, String content,String imageUrl, String videoUrl,Callback callback) {
+    public void shareVideo(String title, String content, String imageUrl, String videoUrl, Callback callback) {
         XhsNote xhsNote = new XhsNote();
         xhsNote.setTitle(title);
         xhsNote.setContent(content);
         xhsNote.setVideoInfo(new XhsVideoInfo(
-                XhsVideoResourceBean.fromUrl(videoUrl),
+                        XhsVideoResourceBean.fromUrl(videoUrl),
                         XhsImageResourceBean.fromUrl(imageUrl)
                 )
         );
 
         String sessionId = XhsShareSdk.shareNote(reactContext.getCurrentActivity(), xhsNote);
-        Log.e(TAG,"sessionId:"+sessionId);
+        Log.e(TAG, "sessionId:" + sessionId);
 
         XhsShareSdk.setShareCallback(new XhsShareCallback() {
             @Override
             public void onSuccess(String s) {
                 callback.invoke("success");
-                Log.e(TAG,"setShareCallback onSuccess: "+s);
+                Log.e(TAG, "setShareCallback onSuccess: " + s);
             }
 
             @Override
             public void onError(@NonNull String s, int i, @NonNull String s1, @Nullable Throwable throwable) {
                 callback.invoke("error");
-                Log.e(TAG,"setShareCallback onError: "+s);
-                Log.e(TAG,"setShareCallback onError: "+s1);
-                Log.e(TAG,"setShareCallback onError: ");
+                Log.e(TAG, "setShareCallback onError: " + s);
+                Log.e(TAG, "setShareCallback onError: " + s1);
+                Log.e(TAG, "setShareCallback onError: ");
             }
         });
     }
 
 
     @ReactMethod
-    public void isXhsInstalled(Callback callback){
+    public void isXhsInstalled(Callback callback) {
         boolean isInstall = XhsShareSdkTools.isXhsInstalled(reactContext);
         callback.invoke(isInstall);
     }

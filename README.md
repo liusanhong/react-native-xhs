@@ -71,6 +71,19 @@ XHS.shareVideo(
                   adShareSuccess();
                 }
               },
-            );         
+            );       
+            
+             //分享多张图片。暂时只支持分享一张
+    XHS.shareImages(
+              data.title, //标题
+              data.content, //内容
+              [data.picture1,data.picture2] //图片
+              v => {
+                console.log('v:::', v);
+                if (v === 'success') {
+                  adShareSuccess();
+                }
+              },
+            );        
 
 ```
