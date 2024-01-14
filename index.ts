@@ -29,6 +29,18 @@ const XHS = {
 
     },
 
+
+    shareImages(title: string, content: string, imageUrls: string[],callback:Function) {
+        // if(Platform.OS === 'ios'){
+        //     Xhs.shareImage(title, content, imageUrl);
+        // }else {
+        // }
+
+        Xhs.shareImages(title, content, imageUrls,callback);
+
+
+    },
+
     shareVideo(title: string, content: string, imageUrl: string, videoUrl: string,callback:Function) {
         // if(Platform.OS === 'ios') {
         //     Xhs.shareVideo(title, content, imageUrl, videoUrl);
